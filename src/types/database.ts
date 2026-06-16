@@ -1,0 +1,18 @@
+// Auto-generated Supabase types — run `npx supabase gen types typescript` to update.
+// This is a stub until the schema is applied in M2.
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+export interface Database {
+  public: {
+    Tables: Record<string, never>;
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+  };
+}

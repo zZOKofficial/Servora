@@ -1,0 +1,2 @@
+-- Seed data for Servora — populated in M2 after schema migrations are applied.
+-- Run: npx supabase db reset --local (applies migrations then this file)
