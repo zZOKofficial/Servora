@@ -31,8 +31,7 @@ export function useSession() {
   }, []);
 
   async function fetchRole(userId: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (supabase as any)
+    const { data } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", userId)
