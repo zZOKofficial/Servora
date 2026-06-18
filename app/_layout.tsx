@@ -8,8 +8,9 @@ import {
 } from "@expo-google-fonts/inter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Slot, SplashScreen, useRouter, useSegments } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SplashAnimation } from "~/components/SplashAnimation";
 import { useSession } from "~/hooks/useSession";
 import { queryClient } from "~/lib/queryClient";
 import { useAuthStore } from "~/store/auth";
@@ -35,10 +36,7 @@ function SessionGate() {
       return;
     }
 
-    // Signed in but still in auth group → redirect to app
     if (!inAuth) return;
-
-    // Let the user finish role selection before redirecting
     if (onRoleSelect && !role) return;
 
     switch (role) {
@@ -60,27 +58,31 @@ function SessionGate() {
 }
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
     Inter_700Bold,
   });
+  const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    if (fontError) throw fontError;
+  }, [fontError]);
 
   useEffect(() => {
-    if (loaded) SplashScreen.hideAsync();
-  }, [loaded]);
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
 
-  if (!loaded) return null;
+  if (!fontsLoaded) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <SessionGate />
+        {!splashDone && (
+          <SplashAnimation onFinish={() => setSplashDone(true)} />
+        )}
       </QueryClientProvider>
     </GestureHandlerRootView>
   );

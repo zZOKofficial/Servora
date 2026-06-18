@@ -1,16 +1,28 @@
 import { View, type ViewProps } from "react-native";
 import { shadow } from "~/lib/theme";
 
+type Elevation = "none" | "xs" | "sm" | "md" | "lg";
+
 interface CardProps extends ViewProps {
-  elevated?: boolean;
+  elevation?: Elevation;
   className?: string;
 }
 
-export function Card({ elevated = false, className = "", style, children, ...props }: CardProps) {
+const elevationMap = {
+  none: undefined,
+  xs: shadow.xs,
+  sm: shadow.sm,
+  md: shadow.md,
+  lg: shadow.lg,
+};
+
+export function Card({ elevation = "sm", className = "", style, children, ...props }: CardProps) {
   return (
     <View
-      style={[elevated ? shadow.md : shadow.sm, style]}
-      className={["bg-white rounded-2xl p-4", className].filter(Boolean).join(" ")}
+      style={[elevationMap[elevation], style]}
+      className={["bg-white rounded-3xl p-5 border border-slate-100", className]
+        .filter(Boolean)
+        .join(" ")}
       {...props}
     >
       {children}

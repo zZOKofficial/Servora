@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { Link } from "expo-router";
-import { Button, Input } from "~/components";
+import { useState } from "react";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import { Button, Input, Logo } from "~/components";
 import { supabase } from "~/lib/supabase";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -24,30 +25,33 @@ export default function SignIn() {
     });
     setLoading(false);
     if (authError) setError(authError.message);
-    // On success: SessionGate in _layout.tsx handles the redirect.
   }
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
+      className="bg-white"
     >
       <ScrollView
         className="flex-1 bg-white"
-        contentContainerClassName="px-6 pt-16 pb-10"
+        contentContainerClassName="px-6 pt-20 pb-10"
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        {/* Brand mark */}
-        <View className="w-14 h-14 bg-primary-600 rounded-2xl items-center justify-center mb-8">
-          <Text className="text-white text-2xl font-bold">S</Text>
-        </View>
+        <Logo size={60} />
 
-        <Text className="text-3xl font-bold text-slate-900 mb-1">Welcome back</Text>
-        <Text className="text-base text-slate-500 mb-8">Sign in to your Servora account</Text>
+        <Text className="text-[32px] leading-[38px] font-bold text-slate-900 mt-8">
+          Welcome back
+        </Text>
+        <Text className="text-base text-slate-500 mt-2 mb-9">
+          Sign in to continue to Servora
+        </Text>
 
-        <View className="gap-4 mb-6">
+        <View className="gap-4 mb-5">
           <Input
             label="Email"
+            icon="mail-outline"
             placeholder="you@example.com"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -57,8 +61,11 @@ export default function SignIn() {
           />
           <Input
             label="Password"
-            placeholder="••••••••"
-            secureTextEntry
+            icon="lock-closed-outline"
+            placeholder="Enter your password"
+            secureTextEntry={!showPassword}
+            rightIcon={showPassword ? "eye-off-outline" : "eye-outline"}
+            onRightIconPress={() => setShowPassword((s) => !s)}
             autoComplete="current-password"
             value={password}
             onChangeText={(t) => { setPassword(t); setError(""); }}
@@ -66,20 +73,18 @@ export default function SignIn() {
         </View>
 
         {error ? (
-          <View className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-6">
-            <Text className="text-sm text-red-600">{error}</Text>
+          <View className="flex-row items-center bg-red-50 border border-red-100 rounded-2xl px-4 py-3 mb-5">
+            <Text className="text-sm text-red-600 flex-1">{error}</Text>
           </View>
         ) : null}
 
-        <Button label="Sign In" onPress={handleSignIn} loading={loading} fullWidth />
+        <Button label="Sign In" onPress={handleSignIn} loading={loading} fullWidth size="lg" />
 
-        <View className="mt-8 items-center">
-          <Text className="text-slate-500 text-base">
-            Don't have an account?{" "}
-            <Link href="/(auth)/sign-up" asChild>
-              <Text className="text-primary-600 font-semibold">Sign up</Text>
-            </Link>
-          </Text>
+        <View className="mt-10 flex-row justify-center">
+          <Text className="text-slate-500 text-[15px]">Don't have an account? </Text>
+          <Link href="/(auth)/sign-up" asChild>
+            <Text className="text-primary-600 font-semibold text-[15px]">Sign up</Text>
+          </Link>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

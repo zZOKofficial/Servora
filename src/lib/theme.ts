@@ -10,6 +10,7 @@ export const colors = {
     700: "#4338ca",
     800: "#3730a3",
     900: "#312e81",
+    950: "#1e1b4b",
     DEFAULT: "#4f46e5",
   },
   accent: {
@@ -27,6 +28,7 @@ export const colors = {
   surface: {
     DEFAULT: "#ffffff",
     muted: "#f8fafc",
+    sunken: "#f1f5f9",
   },
   border: "#e2e8f0",
   text: {
@@ -35,6 +37,14 @@ export const colors = {
     muted: "#94a3b8",
     inverse: "#ffffff",
   },
+} as const;
+
+// Brand gradient stops — reused across hero surfaces, splash, CTAs.
+export const gradients = {
+  brand: ["#4338ca", "#4f46e5", "#6366f1"] as const,
+  brandDiagonal: ["#3730a3", "#4f46e5", "#818cf8"] as const,
+  accent: ["#f59e0b", "#fbbf24"] as const,
+  dusk: ["#312e81", "#4f46e5"] as const,
 } as const;
 
 export const typography = {
@@ -81,29 +91,45 @@ export const radius = {
   md: 10,
   lg: 14,
   xl: 20,
+  "2xl": 24,
   full: 9999,
 } as const;
 
 export const shadow = {
-  sm: {
-    shadowColor: "#000",
+  xs: {
+    shadowColor: "#0f172a",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.04,
     shadowRadius: 2,
     elevation: 1,
   },
-  md: {
-    shadowColor: "#000",
+  sm: {
+    shadowColor: "#0f172a",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.05,
     shadowRadius: 6,
-    elevation: 3,
+    elevation: 2,
+  },
+  md: {
+    shadowColor: "#0f172a",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
   lg: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowColor: "#0f172a",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 24,
+    elevation: 8,
+  },
+  // Colored glow for primary CTAs / hero cards.
+  glow: {
+    shadowColor: "#4f46e5",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 8,
   },
 } as const;

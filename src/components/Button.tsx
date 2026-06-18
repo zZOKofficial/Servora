@@ -1,8 +1,16 @@
-import { ActivityIndicator, Pressable, Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { shadow } from "~/lib/theme";
 
 type Variant = "primary" | "secondary" | "outline" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
+type IconName = React.ComponentProps<typeof Ionicons>["name"];
 
 interface ButtonProps {
   label: string;
@@ -12,36 +20,31 @@ interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  icon?: IconName;
+  iconPosition?: "left" | "right";
   className?: string;
 }
 
 const variantClasses: Record<Variant, { container: string; text: string }> = {
-  primary: {
-    container: "bg-primary-600 active:bg-primary-700",
-    text: "text-white font-semibold",
-  },
-  secondary: {
-    container: "bg-primary-100 active:bg-primary-200",
-    text: "text-primary-700 font-semibold",
-  },
-  outline: {
-    container: "border border-primary-600 bg-transparent active:bg-primary-50",
-    text: "text-primary-600 font-semibold",
-  },
-  ghost: {
-    container: "bg-transparent active:bg-slate-100",
-    text: "text-primary-600 font-medium",
-  },
-  danger: {
-    container: "bg-red-500 active:bg-red-600",
-    text: "text-white font-semibold",
-  },
+  primary: { container: "bg-primary-600", text: "text-white font-semibold" },
+  secondary: { container: "bg-primary-50", text: "text-primary-700 font-semibold" },
+  outline: { container: "border border-slate-200 bg-white", text: "text-slate-800 font-semibold" },
+  ghost: { container: "bg-transparent", text: "text-primary-600 font-semibold" },
+  danger: { container: "bg-red-500", text: "text-white font-semibold" },
 };
 
-const sizeClasses: Record<Size, { container: string; text: string }> = {
-  sm: { container: "px-3 py-2 rounded-lg", text: "text-sm" },
-  md: { container: "px-5 py-3 rounded-xl", text: "text-base" },
-  lg: { container: "px-6 py-4 rounded-xl", text: "text-lg" },
+const sizeClasses: Record<Size, { container: string; text: string; icon: number }> = {
+  sm: { container: "px-4 h-10 rounded-xl", text: "text-sm", icon: 16 },
+  md: { container: "px-5 h-12 rounded-2xl", text: "text-[15px]", icon: 18 },
+  lg: { container: "px-6 h-14 rounded-2xl", text: "text-base", icon: 20 },
+};
+
+const iconColor: Record<Variant, string> = {
+  primary: "#fff",
+  secondary: "#4338ca",
+  outline: "#1e293b",
+  ghost: "#4f46e5",
+  danger: "#fff",
 };
 
 export function Button({
@@ -52,11 +55,16 @@ export function Button({
   loading = false,
   disabled = false,
   fullWidth = false,
+  icon,
+  iconPosition = "left",
   className = "",
 }: ButtonProps) {
   const v = variantClasses[variant];
   const s = sizeClasses[size];
   const isDisabled = disabled || loading;
+  const scale = useSharedValue(1);
+
+  const animStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
   const handlePress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -64,28 +72,41 @@ export function Button({
   };
 
   return (
-    <Pressable
-      onPress={handlePress}
-      disabled={isDisabled}
-      className={[
-        "flex-row items-center justify-center",
-        v.container,
-        s.container,
-        fullWidth ? "w-full" : "self-start",
-        isDisabled ? "opacity-50" : "",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === "primary" || variant === "danger" ? "#fff" : "#4f46e5"}
-        />
-      ) : (
-        <Text className={[v.text, s.text].join(" ")}>{label}</Text>
-      )}
-    </Pressable>
+    <Animated.View style={[animStyle, fullWidth ? { width: "100%" } : { alignSelf: "flex-start" }]}>
+      <Pressable
+        onPress={handlePress}
+        disabled={isDisabled}
+        onPressIn={() => (scale.value = withTiming(0.97, { duration: 90 }))}
+        onPressOut={() => (scale.value = withTiming(1, { duration: 120 }))}
+        style={variant === "primary" && !isDisabled ? shadow.glow : undefined}
+        className={[
+          "flex-row items-center justify-center",
+          v.container,
+          s.container,
+          fullWidth ? "w-full" : "",
+          isDisabled ? "opacity-40" : "",
+          className,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {loading ? (
+          <ActivityIndicator
+            size="small"
+            color={variant === "primary" || variant === "danger" ? "#fff" : "#4f46e5"}
+          />
+        ) : (
+          <View className="flex-row items-center">
+            {icon && iconPosition === "left" && (
+              <Ionicons name={icon} size={s.icon} color={iconColor[variant]} style={{ marginRight: 8 }} />
+            )}
+            <Text className={[v.text, s.text].join(" ")}>{label}</Text>
+            {icon && iconPosition === "right" && (
+              <Ionicons name={icon} size={s.icon} color={iconColor[variant]} style={{ marginLeft: 8 }} />
+            )}
+          </View>
+        )}
+      </Pressable>
+    </Animated.View>
   );
 }

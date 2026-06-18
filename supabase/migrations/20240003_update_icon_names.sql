@@ -1,0 +1,21 @@
+-- Replace emoji icon_name values with Ionicons string names
+update public.services set icon_name = 'water-outline'            where title = 'Pipe Leak Repair';
+update public.services set icon_name = 'settings-outline'         where title = 'Tap & Faucet Install';
+update public.services set icon_name = 'funnel-outline'           where title = 'Drain Unclogging';
+update public.services set icon_name = 'flash-outline'            where title = 'Wiring & Rewiring';
+update public.services set icon_name = 'sync-outline'             where title = 'Fan Installation';
+update public.services set icon_name = 'power-outline'            where title = 'Socket & Switch Fix';
+update public.services set icon_name = 'thermometer-outline'      where title = 'AC Service & Cleaning';
+update public.services set icon_name = 'construct-outline'        where title = 'AC Installation';
+update public.services set icon_name = 'snow-outline'             where title = 'Refrigerator Repair';
+update public.services set icon_name = 'sparkles-outline'         where title = 'Deep Home Cleaning';
+update public.services set icon_name = 'color-wand-outline'       where title = 'Sofa & Carpet Cleaning';
+update public.services set icon_name = 'shield-checkmark-outline' where title = 'Bathroom Sanitisation';
+update public.services set icon_name = 'brush-outline'            where title = 'Wall Painting';
+update public.services set icon_name = 'color-fill-outline'       where title = 'Grill & Gate Painting';
+update public.services set icon_name = 'hammer-outline'           where title = 'Furniture Assembly';
+update public.services set icon_name = 'keypad-outline'           where title = 'Door & Window Repair';
+update public.services set icon_name = 'bug-outline'              where title = 'Cockroach Treatment';
+update public.services set icon_name = 'leaf-outline'             where title = 'Mosquito Fogging';
+update public.services set icon_name = 'cut-outline'              where title = 'Home Salon — Women';
+update public.services set icon_name = 'heart-outline'            where title = 'Massage Therapy';

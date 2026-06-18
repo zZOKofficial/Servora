@@ -1,50 +1,26 @@
 import { Tabs } from "expo-router";
-import { Text } from "react-native";
-
-function TabIcon({ emoji, label, focused }: { emoji: string; label: string; focused: boolean }) {
-  return (
-    <Text style={{ fontSize: focused ? 22 : 20, opacity: focused ? 1 : 0.5 }}>{emoji}</Text>
-  );
-}
+import { makeTabIcon, tabScreenOptions } from "~/lib/tabBar";
 
 export default function CustomerLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: { backgroundColor: "#fff", borderTopColor: "#e2e8f0" },
-        tabBarActiveTintColor: "#4f46e5",
-        tabBarInactiveTintColor: "#94a3b8",
-      }}
-    >
+    <Tabs screenOptions={tabScreenOptions}>
       <Tabs.Screen
         name="home"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" label="Home" focused={focused} />,
-        }}
+        options={{ title: "Home", tabBarIcon: makeTabIcon("home", "home-outline") }}
       />
       <Tabs.Screen
         name="bookings"
-        options={{
-          title: "Bookings",
-          tabBarIcon: ({ focused }) => <TabIcon emoji="📋" label="Bookings" focused={focused} />,
-        }}
+        options={{ title: "Bookings", tabBarIcon: makeTabIcon("calendar", "calendar-outline") }}
       />
       <Tabs.Screen
         name="assistant"
-        options={{
-          title: "Assistant",
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🤖" label="Assistant" focused={focused} />,
-        }}
+        options={{ title: "Assistant", tabBarIcon: makeTabIcon("sparkles", "sparkles-outline") }}
       />
       <Tabs.Screen
         name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ focused }) => <TabIcon emoji="👤" label="Profile" focused={focused} />,
-        }}
+        options={{ title: "Profile", tabBarIcon: makeTabIcon("person", "person-outline") }}
       />
+      <Tabs.Screen name="service/[id]" options={{ href: null }} />
     </Tabs>
   );
 }

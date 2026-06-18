@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.servora.app"
+      "bundleIdentifier": "com.servora.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.servora.app",
@@ -24,7 +27,11 @@
         "googleMaps": {
           "apiKey": "PLACEHOLDER_GOOGLE_MAPS_API_KEY"
         }
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -54,10 +61,18 @@
           "icon": "./assets/images/icon.png",
           "color": "#4F46E5"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e9ef8311-b9b3-4afe-b5b4-c148100965c7"
+      }
+    },
+    "owner": "zzokofficial"
   }
 }

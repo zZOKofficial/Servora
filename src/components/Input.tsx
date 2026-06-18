@@ -1,12 +1,15 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, Text, TextInput, View, type TextInputProps } from "react-native";
+
+type IconName = React.ComponentProps<typeof Ionicons>["name"];
 
 interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   hint?: string;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  icon?: IconName;
+  rightIcon?: IconName;
   onRightIconPress?: () => void;
 }
 
@@ -14,7 +17,7 @@ export function Input({
   label,
   error,
   hint,
-  leftIcon,
+  icon,
   rightIcon,
   onRightIconPress,
   className = "",
@@ -29,38 +32,39 @@ export function Input({
     : "border-slate-200";
 
   return (
-    <View className="gap-1.5">
-      {label && (
-        <Text className="text-sm font-medium text-slate-700">{label}</Text>
-      )}
+    <View className="gap-2">
+      {label && <Text className="text-sm font-semibold text-slate-700 ml-1">{label}</Text>}
       <View
         className={[
-          "flex-row items-center bg-white border rounded-xl px-3",
+          "flex-row items-center bg-white border-[1.5px] rounded-2xl px-4 h-[52px]",
           borderClass,
         ].join(" ")}
       >
-        {leftIcon && <View className="mr-2">{leftIcon}</View>}
+        {icon && (
+          <Ionicons
+            name={icon}
+            size={19}
+            color={focused ? "#4f46e5" : "#94a3b8"}
+            style={{ marginRight: 10 }}
+          />
+        )}
         <TextInput
-          className={["flex-1 py-3 text-base text-slate-900", className].join(" ")}
+          className={["flex-1 text-[15px] text-slate-900 h-full", className].join(" ")}
           placeholderTextColor="#94a3b8"
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           {...props}
         />
         {rightIcon && (
-          <Pressable
-            onPress={onRightIconPress}
-            className="ml-2 p-1"
-            hitSlop={8}
-          >
-            {rightIcon}
+          <Pressable onPress={onRightIconPress} className="ml-2 p-1" hitSlop={8}>
+            <Ionicons name={rightIcon} size={19} color="#94a3b8" />
           </Pressable>
         )}
       </View>
       {error ? (
-        <Text className="text-xs text-red-500">{error}</Text>
+        <Text className="text-xs text-red-500 ml-1">{error}</Text>
       ) : hint ? (
-        <Text className="text-xs text-slate-400">{hint}</Text>
+        <Text className="text-xs text-slate-400 ml-1">{hint}</Text>
       ) : null}
     </View>
   );
